@@ -20,6 +20,7 @@ int main()
 	{
 		return -1;
 	}
+
 	if (!eng.BufferModel())
 	{
 		return -1;
@@ -27,7 +28,10 @@ int main()
 
 	if (eng.UseShaders())
 	{
-		eng.GameLoop();
+		if (eng.LoadTexture())
+		{
+			eng.GameLoop();
+		}
 	}
 
 	return 0;

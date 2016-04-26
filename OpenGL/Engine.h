@@ -1,5 +1,7 @@
 #pragma once
 #include "ShaderManager.h"
+#include "Model.h"
+#include "Texture.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <FreeImage.h>
@@ -17,13 +19,14 @@ public:
 
 	bool Init();
 	bool BufferModel();
+	bool LoadTexture();
 	bool UseShaders();
 	bool GameLoop();
 
 private:
 	GLFWwindow* GLFWwindowPtr;
-	GLuint vertArr;
-	unsigned int vertCount;
 	ShaderManager shaderMng;
+	Model model;
+	Texture texture;
 };
 
