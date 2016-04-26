@@ -40,27 +40,3 @@ struct VertInd {
 	unsigned int uvInd;
 	unsigned int normInd;
 };
-
-struct Transform {
-	vec3 location, rotation, size;
-	mat4 matrix;
-};
-
-struct Rigidbody {
-	vec3 velocity;
-	vec3 acceleration;
-	vec3 force;
-	float mass;
-};
-enum Collider { 
-	colliderless,
-	AABB,
-	sphere
-};
-
-struct Object {
-	Transform transform;
-	Rigidbody rigidbody;
-	Collider collider;
-	GLuint texID;
-};

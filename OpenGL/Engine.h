@@ -1,5 +1,9 @@
 #pragma once
 #include "ShaderManager.h"
+#include "ComponentTypes.h"
+#include "Component.h"
+#include "GameObject.h"
+#include "Camera.h"
 #include "Model.h"
 #include "Texture.h"
 #include "InputManager.h"
@@ -25,7 +29,7 @@ public:
 
 	bool Init();
 	bool BufferModels();
-	bool LoadTexture();
+	bool LoadTextures();
 	bool UseShaders();
 	bool GameLoop();
 
@@ -34,13 +38,13 @@ private:
 	ShaderManager shaderMng;
 	Model quad, arrowquad;
 	Texture texture;
-	vector<Object> objects;
+	vector<GameObject> objects;
 	float timeNow, timePrevious, deltaTime;
 	const float F_GRAVITY = -0.05;
 	const float WARIO_MOVE_FORCE = 5;
 	const float WARIO_MAX_SPEED = .6;
 	bool alive = true;
 
-	bool Collides(const Object &obj1, const Object &obj2);
+	bool Collides(const GameObject &obj1, const GameObject &obj2);
 };
 

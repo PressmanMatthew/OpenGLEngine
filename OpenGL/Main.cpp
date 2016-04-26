@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "Game.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <FreeImage.h>
@@ -11,28 +11,9 @@ using std::vector;
 
 int main()
 {
-	Engine eng = Engine();
-	/*char* str = glGetString(GL_VERSION);
+	Game game = Game();
 
-	cout << glGetString(GL_VERSION);*/
-
-	if (!eng.Init())
-	{
-		return -1;
-	}
-
-	if (!eng.BufferModels())
-	{
-		return -1;
-	}
-
-	if (eng.UseShaders())
-	{
-		if (eng.LoadTexture())
-		{
-			eng.GameLoop();
-		}
-	}
+	if (!game.Run()) return false;
 
 	return 0;
 }

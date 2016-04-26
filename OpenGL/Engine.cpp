@@ -38,10 +38,21 @@ bool Engine::Init()
 	glfwSetMouseButtonCallback(GLFWwindowPtr, InputManager::MouseClick);
 	glfwSetKeyCallback(GLFWwindowPtr, InputManager::KeyCallback);
 
+	//Initialize Component Types
+	//ComponentTypes::Init();
+
+	if (!BufferModels()) return false;
+
 	//Add 18 blank objects
 	for (int i = 0; i < 18; i++)
 	{
-		objects.push_back(Object());
+		objects.push_back(GameObject());
+	}
+
+	//Give them models
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i].model = quad;
 	}
 
 	//Give them Textures
@@ -97,6 +108,9 @@ bool Engine::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	if (!UseShaders()) return false;
+	if (!LoadTextures()) return false;
+
 	return true;
 }
 
@@ -108,7 +122,7 @@ bool Engine::BufferModels()
 	return true;
 }
 
-bool Engine::LoadTexture()
+bool Engine::LoadTextures()
 {
 	if (!texture.Load("textures/background.jpg")) return false;
 	if (!texture.Load("textures/wario.png")) return false;
@@ -132,7 +146,7 @@ bool Engine::UseShaders()
 	}
 }
 
-bool Engine::Collides(const Object &obj1, const Object &obj2)
+bool Engine::Collides(const GameObject &obj1, const GameObject &obj2)
 {
 	//No collision
 	if (obj1.collider == colliderless || obj2.collider == colliderless) return false;
@@ -155,8 +169,8 @@ bool Engine::Collides(const Object &obj1, const Object &obj2)
 		if (fabs(zDist) > ((obj1.transform.size.z * .5) + (obj2.transform.size.z * .5))) return false;
 	}
 
-	Object aabbCol = obj1;
-	Object sphereCol = obj2;
+	GameObject aabbCol = obj1;
+	GameObject sphereCol = obj2;
 
 	//Invert objects for sphere to AABB collision
 	if (obj1.collider == sphere && obj2.collider == AABB)
@@ -286,15 +300,9 @@ bool Engine::GameLoop()
 
 			
 
-			//Draw objects[i]ect
-			//if (objects[i].texID == 3)
-			//{
-			//	arrowquad.Render();
-			//}
-			//else
-			//{
-				quad.Render();
-			//}
+			//Draw objects
+			objects[i].model.Render();
+			
 
 			//Reset forces for the next frame
 			objects[i].rigidbody.force = vec3(0, 0, 0);

@@ -1,7 +1,5 @@
 #include "Model.h"
 
-
-
 Model::Model()
 {
 	vertArr = 0;
