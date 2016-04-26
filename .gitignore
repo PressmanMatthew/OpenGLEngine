@@ -31,6 +31,9 @@
 *.vcxproj
 *.vcxproj.filters
 *.sdf
+*.suo
+*.ilk
+*.pdb
 
 # OpenGL Libraries
 OpenGL/Debug/
