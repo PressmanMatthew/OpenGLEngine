@@ -21,7 +21,7 @@ int main()
 		return -1;
 	}
 
-	if (!eng.BufferModel())
+	if (!eng.BufferModels())
 	{
 		return -1;
 	}

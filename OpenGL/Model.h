@@ -11,6 +11,7 @@
 
 using glm::vec2;
 using glm::vec3;
+using glm::mat4;
 using std::vector;
 using std::string;
 using std::ifstream;
@@ -38,4 +39,14 @@ struct VertInd {
 	unsigned int locInd;
 	unsigned int uvInd;
 	unsigned int normInd;
+};
+
+struct Transform {
+	vec3 location, rotation, size;
+	mat4 matrix;
+};
+
+struct Object {
+	Transform transform;
+	GLuint texID;
 };

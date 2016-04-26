@@ -8,9 +8,13 @@
 #include <FreeImage.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include <vector>
 
 using std::vector;
+using glm::scale;
+using glm::translate;
+using glm::yawPitchRoll;
 
 class Engine
 {
@@ -19,7 +23,7 @@ public:
 	~Engine();
 
 	bool Init();
-	bool BufferModel();
+	bool BufferModels();
 	bool LoadTexture();
 	bool UseShaders();
 	bool GameLoop();
@@ -27,7 +31,8 @@ public:
 private:
 	GLFWwindow* GLFWwindowPtr;
 	ShaderManager shaderMng;
-	Model model;
+	Model quad, arrowquad;
 	Texture texture;
+	vector<Object> objects;
 };
 
