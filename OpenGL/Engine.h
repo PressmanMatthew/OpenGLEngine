@@ -34,5 +34,9 @@ private:
 	Model quad, arrowquad;
 	Texture texture;
 	vector<Object> objects;
+	float timeNow, timePrevious, deltaTime;
+	const float F_GRAVITY = -0.05;
+	const float WARIO_MOVE_FORCE = 5;
+	const float WARIO_MAX_SPEED = .6;
 };
 

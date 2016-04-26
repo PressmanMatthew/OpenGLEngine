@@ -38,46 +38,21 @@ bool Engine::Init()
 	glfwSetMouseButtonCallback(GLFWwindowPtr, InputManager::MouseClick);
 	glfwSetKeyCallback(GLFWwindowPtr, InputManager::KeyCallback);
 
-	objects.push_back(Object());
-	objects.push_back(Object());
-	
-	//Arrows
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
-	objects.push_back(Object());
+	//Add 18 blank objects
+	for (int i = 0; i < 18; i++)
+	{
+		objects.push_back(Object());
+	}
 
+	//Give them Textures
 	objects[0].texID = 1;
 	objects[1].texID = 2;
-	objects[2].texID = 3;
-	objects[3].texID = 3;
-	objects[4].texID = 3;
-	objects[5].texID = 3;
-	objects[6].texID = 3;
-	objects[7].texID = 3;
-	objects[8].texID = 3;
-	objects[9].texID = 3;
-	objects[10].texID = 3;
-	objects[11].texID = 3;
-	objects[12].texID = 3;
-	objects[13].texID = 3;
-	objects[14].texID = 3;
-	objects[15].texID = 3;
-	objects[16].texID = 3;
-	objects[17].texID = 3;
+	for (int i = 2; i < objects.size(); i++)
+	{
+		objects[i].texID = 3;
+	}
 	
+	//Transforms 
 	objects[0].transform.location = vec3(0, 0, -1);
 	objects[0].transform.rotation = vec3(0, 0, 0);
 	objects[0].transform.size = vec3(2, 2, 0);
@@ -86,72 +61,36 @@ bool Engine::Init()
 	objects[1].transform.rotation = vec3(0, 0, 0);
 	objects[1].transform.size = vec3(.3, .4, 0);
 
-	//Arrows
+	//Arrow Transforms
+	float j = -.9;
+	for (int i = 2; i < objects.size(); i++)
+	{
+		objects[i].transform.location = vec3(j, 1.5, 0);
+		objects[i].transform.rotation = vec3(0, 0, 0);
+		objects[i].transform.size = vec3(.2, .2, 0);
+		if (j >= -.2 && j < .1) {
+			j += .4;
+		}
+		else {
+			j += .1;
+		}
+	}
 
-	objects[2].transform.location = vec3(-.9, .6, 0);
-	objects[2].transform.rotation = vec3(0, 0, 0);
-	objects[2].transform.size = vec3(.2, .2, 0);
+	//Rigidbodies
+	objects[1].rigidbody.velocity = vec3(0, 0, 0);
+	objects[1].rigidbody.force = vec3(0, 0, 0);
+	objects[1].rigidbody.mass = 1;
 
-	objects[3].transform.location = vec3(-.8, .6, 0);
-	objects[3].transform.rotation = vec3(0, 0, 0);
-	objects[3].transform.size = vec3(.2, .2, 0);
+	for (int i = 2; i < objects.size(); i++)
+	{
+		objects[i].rigidbody.velocity = vec3(0, 0, 0);
+		objects[i].rigidbody.force = vec3(0, 0, 0);
+		objects[i].rigidbody.mass = .1;
+	}
 
-	objects[4].transform.location = vec3(-.7, .6, 0);
-	objects[4].transform.rotation = vec3(0, 0, 0);
-	objects[4].transform.size = vec3(.2, .2, 0);
-
-	objects[5].transform.location = vec3(-.6, .6, 0);
-	objects[5].transform.rotation = vec3(0, 0, 0);
-	objects[5].transform.size = vec3(.2, .2, 0);
-
-	objects[6].transform.location = vec3(-.5, .6, 0);
-	objects[6].transform.rotation = vec3(0, 0, 0);
-	objects[6].transform.size = vec3(.2, .2, 0);
-
-	objects[7].transform.location = vec3(-.4, .6, 0);
-	objects[7].transform.rotation = vec3(0, 0, 0);
-	objects[7].transform.size = vec3(.2, .2, 0);
-
-	objects[8].transform.location = vec3(-.3, .6, 0);
-	objects[8].transform.rotation = vec3(0, 0, 0);
-	objects[8].transform.size = vec3(.2, .2, 0);
-
-	objects[9].transform.location = vec3(-.2, .6, 0);
-	objects[9].transform.rotation = vec3(0, 0, 0);
-	objects[9].transform.size = vec3(.2, .2, 0);
-
-	objects[10].transform.location = vec3(.2, .6, 0);
-	objects[10].transform.rotation = vec3(0, 0, 0);
-	objects[10].transform.size = vec3(.2, .2, 0);
-
-	objects[11].transform.location = vec3(.3, .6, 0);
-	objects[11].transform.rotation = vec3(0, 0, 0);
-	objects[11].transform.size = vec3(.2, .2, 0);
-
-	objects[12].transform.location = vec3(.4, .6, 0);
-	objects[12].transform.rotation = vec3(0, 0, 0);
-	objects[12].transform.size = vec3(.2, .2, 0);
-
-	objects[13].transform.location = vec3(.5, .6, 0);
-	objects[13].transform.rotation = vec3(0, 0, 0);
-	objects[13].transform.size = vec3(.2, .2, 0);
-
-	objects[14].transform.location = vec3(.6, .6, 0);
-	objects[14].transform.rotation = vec3(0, 0, 0);
-	objects[14].transform.size = vec3(.2, .2, 0);
-
-	objects[15].transform.location = vec3(.7, .6, 0);
-	objects[15].transform.rotation = vec3(0, 0, 0);
-	objects[15].transform.size = vec3(.2, .2, 0);
-
-	objects[16].transform.location = vec3(.8, .6, 0);
-	objects[16].transform.rotation = vec3(0, 0, 0);
-	objects[16].transform.size = vec3(.2, .2, 0);
-
-	objects[17].transform.location = vec3(.9, .6, 0);
-	objects[17].transform.rotation = vec3(0, 0, 0);
-	objects[17].transform.size = vec3(.2, .2, 0);
-
+	timeNow = 0;
+	timePrevious = 0;
+	deltaTime = 0;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -194,22 +133,80 @@ bool Engine::GameLoop()
 {
 	while (!glfwWindowShouldClose(GLFWwindowPtr))
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		timePrevious = timeNow;
+		timeNow = glfwGetTime();
+		deltaTime = timeNow - timePrevious;
 
 		if (!InputManager::keyIsDown[GLFW_KEY_ESCAPE] && InputManager::keyWasDown[GLFW_KEY_ESCAPE])
 		{
 			glfwSetWindowShouldClose(GLFWwindowPtr, GL_TRUE);
 		}
 
-		for each( Object obj in objects)
+		if (!InputManager::keyIsDown[GLFW_KEY_D])
 		{
-			obj.transform.matrix = translate(obj.transform.location);
-			obj.transform.matrix *= yawPitchRoll(obj.transform.rotation.y, obj.transform.rotation.x, obj.transform.rotation.z);
-			obj.transform.matrix *= scale(obj.transform.size);
-			glUniformMatrix4fv(3, 1, GL_FALSE, &obj.transform.matrix[0][0]);
+			objects[1].rigidbody.force.x -= WARIO_MOVE_FORCE;
+		}
+
+		if (!InputManager::keyIsDown[GLFW_KEY_A])
+		{
+			objects[1].rigidbody.force.x += WARIO_MOVE_FORCE;
+		}
+
+		//Update Objects
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		//Wario Control
+		
+		if (objects[1].rigidbody.velocity.x < .1 && objects[1].rigidbody.velocity.x > -.1)
+		{
+			objects[1].rigidbody.velocity.x = 0; //Stop Wario if He's going almost 0 velocity
+		}
+		if (objects[1].rigidbody.velocity.x > WARIO_MAX_SPEED)
+		{
+			objects[1].rigidbody.velocity.x = WARIO_MAX_SPEED; //Limit Wario from going to fast to the right
+		}
+		if (objects[1].rigidbody.velocity.x < -WARIO_MAX_SPEED)
+		{
+			objects[1].rigidbody.velocity.x = -WARIO_MAX_SPEED; //Limit Wario from going to fast to the left
+		}
+		if (objects[1].transform.location.x > .9)
+		{
+			objects[1].transform.location.x = .9;
+			objects[1].rigidbody.velocity.x = 0;
+		}
+		else if (objects[1].transform.location.x < -.9)
+		{
+			objects[1].transform.location.x = -.9;
+			objects[1].rigidbody.velocity.x = 0;
+		}
+
+		for (int i = 0; i < objects.size(); i++) {
 			
-			glBindTexture(GL_TEXTURE_2D, obj.texID);
-			if (obj.texID == 3)
+			//Update Rigidbody
+			if (objects[i].texID == 3)
+			{
+				objects[i].rigidbody.force.y += F_GRAVITY;
+			}
+
+
+			if (objects[i].texID != 1)
+			{
+				objects[i].rigidbody.velocity += ((objects[i].rigidbody.force / objects[i].rigidbody.mass) * deltaTime);
+				objects[i].transform.location += objects[i].rigidbody.velocity * deltaTime;
+			}
+
+			//Update transform
+			objects[i].transform.matrix = translate(objects[i].transform.location);
+			objects[i].transform.matrix *= yawPitchRoll(objects[i].transform.rotation.y, objects[i].transform.rotation.x, objects[i].transform.rotation.z);
+			objects[i].transform.matrix *= scale(objects[i].transform.size);
+			glUniformMatrix4fv(3, 1, GL_FALSE, &objects[i].transform.matrix[0][0]);
+
+			glBindTexture(GL_TEXTURE_2D, objects[i].texID);
+
+			
+
+			//Draw objects[i]ect
+			if (objects[i].texID == 3)
 			{
 				arrowquad.Render();
 			}
@@ -217,6 +214,9 @@ bool Engine::GameLoop()
 			{
 				quad.Render();
 			}
+
+			//Reset forces for the next frame
+			objects[i].rigidbody.force = vec3(0, 0, 0);
 		}
 		
 
@@ -230,3 +230,4 @@ bool Engine::GameLoop()
 
 	return true;
 }
+

@@ -46,7 +46,15 @@ struct Transform {
 	mat4 matrix;
 };
 
+struct Rigidbody {
+	vec3 velocity;
+	vec3 acceleration;
+	vec3 force;
+	float mass;
+};
+
 struct Object {
 	Transform transform;
+	Rigidbody rigidbody;
 	GLuint texID;
 };

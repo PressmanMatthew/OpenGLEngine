@@ -41,8 +41,5 @@ bool Texture::Load(const char* texFile)
 	//Unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	//glUniform1i(2, 1);
-
-	//glActiveTexture(GL_TEXTURE0 + 0);
-	//glBindTexture(GL_TEXTURE_2D, texID);
+	return true;
 }
