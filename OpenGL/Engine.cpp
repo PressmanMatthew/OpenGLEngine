@@ -59,7 +59,7 @@ bool Engine::Init()
 
 	objects[1].transform.location = vec3(0, -.6, 0);
 	objects[1].transform.rotation = vec3(0, 0, 0);
-	objects[1].transform.size = vec3(.3, .4, 0);
+	objects[1].transform.size = vec3(.2, .4, 0);
 
 	//Arrow Transforms
 	float j = -.9;
@@ -67,7 +67,7 @@ bool Engine::Init()
 	{
 		objects[i].transform.location = vec3(j, 1.5, 0);
 		objects[i].transform.rotation = vec3(0, 0, 0);
-		objects[i].transform.size = vec3(.2, .2, 0);
+		objects[i].transform.size = vec3(.1, .2, 0);
 		if (j >= -.2 && j < .1) {
 			j += .4;
 		}
@@ -80,12 +80,15 @@ bool Engine::Init()
 	objects[1].rigidbody.velocity = vec3(0, 0, 0);
 	objects[1].rigidbody.force = vec3(0, 0, 0);
 	objects[1].rigidbody.mass = 1;
+	objects[1].collider = AABB;
+	objects[0].collider = colliderless;
 
 	for (int i = 2; i < objects.size(); i++)
 	{
 		objects[i].rigidbody.velocity = vec3(0, 0, 0);
 		objects[i].rigidbody.force = vec3(0, 0, 0);
 		objects[i].rigidbody.mass = .1;
+		objects[i].collider = AABB;
 	}
 
 	timeNow = 0;
@@ -127,6 +130,84 @@ bool Engine::UseShaders()
 	{
 		return false;
 	}
+}
+
+bool Engine::Collides(const Object &obj1, const Object &obj2)
+{
+	//No collision
+	if (obj1.collider == colliderless || obj2.collider == colliderless) return false;
+
+	//Sphere collision
+	if (obj1.collider == sphere && obj2.collider == sphere)
+	{
+		if (glm::distance(obj1.transform.location, obj2.transform.location) > (obj1.transform.size.x + obj2.transform.size.x)) return false;
+	}
+
+	//Box collision
+	if (obj1.collider == AABB && obj2.collider == AABB)
+	{
+		float xDist = obj1.transform.location.x - obj2.transform.location.x;
+		float yDist = obj1.transform.location.y - obj2.transform.location.y;
+		float zDist = obj1.transform.location.z - obj2.transform.location.z;
+
+		if (fabs(xDist) > ((obj1.transform.size.x * .5) + (obj2.transform.size.x * .5))) return false;
+		if (fabs(yDist) > ((obj1.transform.size.y * .5) + (obj2.transform.size.y * .5))) return false;
+		if (fabs(zDist) > ((obj1.transform.size.z * .5) + (obj2.transform.size.z * .5))) return false;
+	}
+
+	Object aabbCol = obj1;
+	Object sphereCol = obj2;
+
+	//Invert objects for sphere to AABB collision
+	if (obj1.collider == sphere && obj2.collider == AABB)
+	{
+		aabbCol = obj2;
+		sphereCol = obj1;
+	}
+
+	//AABB to sphere collision
+	if ((aabbCol.collider == AABB && sphereCol.collider == sphere))
+	{
+		vec3 aabbColLoc = aabbCol.transform.location;
+		vec3 sphereColLoc = sphereCol.transform.location;
+		float distSq = powf(aabbColLoc.x - sphereColLoc.x, 2) + powf(aabbColLoc.y - sphereColLoc.y, 2) + powf(aabbColLoc.z - sphereColLoc.z, 2);
+
+		if (sphereCol.transform.location.x > aabbCol.transform.location.x + aabbCol.transform.size.x)
+		{
+			//sphere is to the right
+			distSq += powf((aabbCol.transform.location.x - aabbCol.transform.size.x) - sphereCol.transform.location.x, 2);
+		}
+		else if (sphereCol.transform.location.x < aabbCol.transform.location.x - aabbCol.transform.size.x)
+		{
+			//sphere is to the left
+			distSq += powf(sphereCol.transform.location.x - (aabbCol.transform.location.x - aabbCol.transform.size.x), 2);
+		}
+		if (sphereCol.transform.location.y > aabbCol.transform.location.y + aabbCol.transform.size.y)
+		{
+			//sphere is above
+			distSq += powf((aabbCol.transform.location.y - aabbCol.transform.size.y) - sphereCol.transform.location.y, 2);
+		}
+		else if (sphereCol.transform.location.y < aabbCol.transform.location.y - aabbCol.transform.size.y)
+		{
+			//sphere is below
+			distSq += powf(sphereCol.transform.location.y - (aabbCol.transform.location.y - aabbCol.transform.size.y), 2);
+		}
+		if (sphereCol.transform.location.z > aabbCol.transform.location.z + aabbCol.transform.size.z)
+		{
+			//sphere is behind
+			distSq += powf((aabbCol.transform.location.z - aabbCol.transform.size.z) - sphereCol.transform.location.z, 2);
+		}
+		else if (sphereCol.transform.location.z < aabbCol.transform.location.z - aabbCol.transform.size.z)
+		{
+			//sphere is infront
+			distSq += powf(sphereCol.transform.location.z - (aabbCol.transform.location.z - aabbCol.transform.size.z), 2);
+		}
+
+		if (distSq > pow(sphereCol.transform.size.x, 2)) return false;
+		else return true;
+	}
+
+	return true;
 }
 
 bool Engine::GameLoop()
@@ -206,17 +287,26 @@ bool Engine::GameLoop()
 			
 
 			//Draw objects[i]ect
-			if (objects[i].texID == 3)
-			{
-				arrowquad.Render();
-			}
-			else
-			{
+			//if (objects[i].texID == 3)
+			//{
+			//	arrowquad.Render();
+			//}
+			//else
+			//{
 				quad.Render();
-			}
+			//}
 
 			//Reset forces for the next frame
 			objects[i].rigidbody.force = vec3(0, 0, 0);
+		}
+
+		for (int i = 2; i < objects.size(); i++)
+		{
+			if (Collides(objects[1], objects[i]) && alive)
+			{
+				alive = false;
+				cout << "You Died!" << std::endl;
+			}
 		}
 		
 
@@ -230,4 +320,5 @@ bool Engine::GameLoop()
 
 	return true;
 }
+
 

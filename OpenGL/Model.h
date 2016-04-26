@@ -52,9 +52,15 @@ struct Rigidbody {
 	vec3 force;
 	float mass;
 };
+enum Collider { 
+	colliderless,
+	AABB,
+	sphere
+};
 
 struct Object {
 	Transform transform;
 	Rigidbody rigidbody;
+	Collider collider;
 	GLuint texID;
 };
