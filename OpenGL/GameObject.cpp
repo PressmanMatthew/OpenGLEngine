@@ -10,6 +10,10 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+	for (set<Component*>::iterator i = components.begin(); i != components.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 Component* GameObject::AddComponent(string type)

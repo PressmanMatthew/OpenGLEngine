@@ -40,12 +40,14 @@ public:
 	GameObject();
 	~GameObject();
 
+	//To be depricated
 	Transform transform;
 	Rigidbody rigidbody;
 	Collider collider;
 	GLuint texID;
 	Model model;
 
+	//New system to be implemented
 	template <typename type> Component* AddComponent();
 	template <typename type> Component* RemoveComponent();
 	template <typename type> Component* GetComponent();
@@ -59,19 +61,19 @@ private:
 };
 
 template<typename type>
-inline Component* GameObject::AddComponent()
+inline Component * GameObject::AddComponent()
 {
-	return Component();
+	return NULL;
 }
 
 template<typename type>
 inline Component* GameObject::RemoveComponent()
 {
-	return Component();
+	return NULL;
 }
 
 template<typename type>
 inline Component* GameObject::GetComponent()
 {
-	return Component();
+	return NULL;
 }
