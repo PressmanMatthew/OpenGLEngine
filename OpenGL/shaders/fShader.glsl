@@ -2,7 +2,7 @@
 
 in vec3 loc;
 in vec2 fragUV;
-layout (location = 2)uniform sampler2D mytexture;
+uniform sampler2D mytexture;
 
 void main()
 {

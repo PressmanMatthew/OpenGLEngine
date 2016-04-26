@@ -2,6 +2,7 @@
 #include "ShaderManager.h"
 #include "Model.h"
 #include "Texture.h"
+#include "InputManager.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <FreeImage.h>

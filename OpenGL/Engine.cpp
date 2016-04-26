@@ -7,10 +7,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-	/*while (texture.textures.size != 0)
-	{
-		glDeleteTextures(1, &texture.textures[texture.textures.size]);
-	}*/
 }
 
 bool Engine::Init()
@@ -39,6 +35,9 @@ bool Engine::Init()
 		return false;
 	}
 	
+	glfwSetMouseButtonCallback(GLFWwindowPtr, InputManager::MouseClick);
+	glfwSetKeyCallback(GLFWwindowPtr, InputManager::KeyCallback);
+
 	return true;
 }
 
@@ -52,6 +51,9 @@ bool Engine::BufferModel()
 bool Engine::LoadTexture()
 {
 	if (!texture.Load("textures/tileable_stone_wall.jpg")) return false;
+	if (!texture.Load("textures/tileable_brick_wall.jpg")) return false;
+	if (!texture.Load("textures/tileable_grass.jpg")) return false;
+	if (!texture.Load("textures/tileable_marble.jpg")) return false;
 
 	return true;
 }
@@ -73,9 +75,26 @@ bool Engine::UseShaders()
 
 bool Engine::GameLoop()
 {
+	int clicks = 0;
 	while (!glfwWindowShouldClose(GLFWwindowPtr))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwPollEvents();
+
+		if (!InputManager::keyIsDown[GLFW_KEY_ESCAPE] && InputManager::keyWasDown[GLFW_KEY_ESCAPE])
+		{
+			glfwSetWindowShouldClose(GLFWwindowPtr, GL_TRUE);
+		}
+
+		if (!InputManager::keyIsDown[GLFW_MOUSE_BUTTON_1] && InputManager::keyWasDown[GLFW_MOUSE_BUTTON_1])
+		{
+			clicks++;
+		}
+
+		InputManager::keyWasDown = InputManager::keyIsDown;
+
+		glBindTexture(GL_TEXTURE_2D, (clicks % texture.textures.size()) + 1);
 
 		model.Render();
 
