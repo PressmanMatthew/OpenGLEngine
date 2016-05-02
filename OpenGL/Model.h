@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "Component.h"
 
 using glm::vec2;
 using glm::vec3;
@@ -16,7 +17,7 @@ using std::vector;
 using std::string;
 using std::ifstream;
 
-class Model
+class Model : public Component
 {
 public:
 	Model();
@@ -24,6 +25,7 @@ public:
 
 	bool Buffer(string objFile);
 	void Render();
+	void thing() {};
 private:
 	GLuint vertArr;
 	unsigned int vertCount;
@@ -39,28 +41,4 @@ struct VertInd {
 	unsigned int locInd;
 	unsigned int uvInd;
 	unsigned int normInd;
-};
-
-struct Transform {
-	vec3 location, rotation, size;
-	mat4 matrix;
-};
-
-struct Rigidbody {
-	vec3 velocity;
-	vec3 acceleration;
-	vec3 force;
-	float mass;
-};
-enum Collider { 
-	colliderless,
-	AABB,
-	sphere
-};
-
-struct Object {
-	Transform transform;
-	Rigidbody rigidbody;
-	Collider collider;
-	GLuint texID;
 };

@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Model.h"
 
 Engine::Engine()
 {
@@ -38,11 +39,40 @@ bool Engine::Init()
 	glfwSetMouseButtonCallback(GLFWwindowPtr, InputManager::MouseClick);
 	glfwSetKeyCallback(GLFWwindowPtr, InputManager::KeyCallback);
 
+	glfwSetInputMode(GLFWwindowPtr, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+	//Initialize Component Types
+	ComponentTypes::Init();
+
+	cam = Camera();
+
+	if (!BufferModels()) return false;
+
 	//Add 18 blank objects
 	for (int i = 0; i < 18; i++)
 	{
-		objects.push_back(Object());
+		objects.push_back(GameObject());
 	}
+
+	//Add Components
+	/*for (int i = 0; i < 18; i++)
+	{
+		if(i > 0)
+			objects[i].AddComponent("Rigidbody");
+		objects[i].AddComponent("Model");
+		objects[i].AddComponent("Texture");
+	}*/
+	for (int i = 0; i < 18; i++)
+	{
+		objects[i].model = quad;
+	}
+
+	//Give them models
+	/*for (int i = 0; i < objects.size(); i++)
+	{
+		Model* modelPtr = dynamic_cast<Model*>(objects[i].GetComponent("Model"));
+		modelPtr = &quad;
+	}*/
 
 	//Give them Textures
 	objects[0].texID = 1;
@@ -80,15 +110,15 @@ bool Engine::Init()
 	objects[1].rigidbody.velocity = vec3(0, 0, 0);
 	objects[1].rigidbody.force = vec3(0, 0, 0);
 	objects[1].rigidbody.mass = 1;
-	objects[1].collider = AABB;
-	objects[0].collider = colliderless;
+	objects[1].rigidbody.collider = AABB;
+	objects[0].rigidbody.collider = colliderless;
 
 	for (int i = 2; i < objects.size(); i++)
 	{
 		objects[i].rigidbody.velocity = vec3(0, 0, 0);
 		objects[i].rigidbody.force = vec3(0, 0, 0);
 		objects[i].rigidbody.mass = .1;
-		objects[i].collider = AABB;
+		objects[i].rigidbody.collider = AABB;
 	}
 
 	timeNow = 0;
@@ -96,6 +126,9 @@ bool Engine::Init()
 	deltaTime = 0;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	if (!UseShaders()) return false;
+	if (!LoadTextures()) return false;
 
 	return true;
 }
@@ -108,11 +141,11 @@ bool Engine::BufferModels()
 	return true;
 }
 
-bool Engine::LoadTexture()
+bool Engine::LoadTextures()
 {
-	if (!texture.Load("textures/background.jpg")) return false;
-	if (!texture.Load("textures/wario.png")) return false;
-	if (!texture.Load("textures/arrow.png")) return false;
+	if (!texture.Load("background.jpg")) return false;
+	if (!texture.Load("wario.png")) return false;
+	if (!texture.Load("arrow.png")) return false;
 
 	return true;
 }
@@ -132,19 +165,19 @@ bool Engine::UseShaders()
 	}
 }
 
-bool Engine::Collides(const Object &obj1, const Object &obj2)
+bool Engine::Collides(const GameObject &obj1, const GameObject &obj2)
 {
 	//No collision
-	if (obj1.collider == colliderless || obj2.collider == colliderless) return false;
+	if (obj1.rigidbody.collider == colliderless || obj2.rigidbody.collider == colliderless) return false;
 
 	//Sphere collision
-	if (obj1.collider == sphere && obj2.collider == sphere)
+	if (obj1.rigidbody.collider == sphere && obj2.rigidbody.collider == sphere)
 	{
 		if (glm::distance(obj1.transform.location, obj2.transform.location) > (obj1.transform.size.x + obj2.transform.size.x)) return false;
 	}
 
 	//Box collision
-	if (obj1.collider == AABB && obj2.collider == AABB)
+	if (obj1.rigidbody.collider == AABB && obj2.rigidbody.collider == AABB)
 	{
 		float xDist = obj1.transform.location.x - obj2.transform.location.x;
 		float yDist = obj1.transform.location.y - obj2.transform.location.y;
@@ -155,22 +188,23 @@ bool Engine::Collides(const Object &obj1, const Object &obj2)
 		if (fabs(zDist) > ((obj1.transform.size.z * .5) + (obj2.transform.size.z * .5))) return false;
 	}
 
-	Object aabbCol = obj1;
-	Object sphereCol = obj2;
+	GameObject aabbCol = obj1;
+	GameObject sphereCol = obj2;
 
 	//Invert objects for sphere to AABB collision
-	if (obj1.collider == sphere && obj2.collider == AABB)
+	if (obj1.rigidbody.collider == sphere && obj2.rigidbody.collider == AABB)
 	{
 		aabbCol = obj2;
 		sphereCol = obj1;
 	}
 
 	//AABB to sphere collision
-	if ((aabbCol.collider == AABB && sphereCol.collider == sphere))
+	if ((aabbCol.rigidbody.collider == AABB && sphereCol.rigidbody.collider == sphere))
 	{
 		vec3 aabbColLoc = aabbCol.transform.location;
 		vec3 sphereColLoc = sphereCol.transform.location;
-		float distSq = powf(aabbColLoc.x - sphereColLoc.x, 2) + powf(aabbColLoc.y - sphereColLoc.y, 2) + powf(aabbColLoc.z - sphereColLoc.z, 2);
+		float distSq = 0;
+		distSq += powf(aabbColLoc.x - sphereColLoc.x, 2) + powf(aabbColLoc.y - sphereColLoc.y, 2) + powf(aabbColLoc.z - sphereColLoc.z, 2);
 
 		if (sphereCol.transform.location.x > aabbCol.transform.location.x + aabbCol.transform.size.x)
 		{
@@ -212,11 +246,15 @@ bool Engine::Collides(const Object &obj1, const Object &obj2)
 
 bool Engine::GameLoop()
 {
+	vec3 cameraForce = vec3();
+
 	while (!glfwWindowShouldClose(GLFWwindowPtr))
 	{
 		timePrevious = timeNow;
 		timeNow = glfwGetTime();
 		deltaTime = timeNow - timePrevious;
+
+		cameraForce = vec3();
 
 		if (!InputManager::keyIsDown[GLFW_KEY_ESCAPE] && InputManager::keyWasDown[GLFW_KEY_ESCAPE])
 		{
@@ -232,6 +270,33 @@ bool Engine::GameLoop()
 		{
 			objects[1].rigidbody.force.x += WARIO_MOVE_FORCE;
 		}
+
+		if (!InputManager::keyIsDown[GLFW_KEY_UP])
+		{
+			cameraForce += vec3(0, 0, .0005);
+		}
+		if (!InputManager::keyIsDown[GLFW_KEY_DOWN])
+		{
+			cameraForce += vec3(0, 0, -.0005);
+		}
+		if (!InputManager::keyIsDown[GLFW_KEY_LEFT])
+		{
+			cameraForce += vec3(.0005, 0, 0);
+		}
+		if (!InputManager::keyIsDown[GLFW_KEY_RIGHT])
+		{
+			cameraForce += vec3(-.0005, 0, 0);
+		}
+
+		float sens = .005;
+		int w = 800, h = 600;
+		double x, y;
+		glfwGetCursorPos(GLFWwindowPtr, &x, &y);
+
+		cam.transform.rotation.y -= sens * (x - w * .5f); //Yaw
+		cam.transform.rotation.x -= sens * (y - h * .5f); //Pitch
+		cam.transform.rotation.x = glm::clamp(cam.transform.rotation.x, -.5f * 3.14159f, .5f * 3.14159f);
+		glfwSetCursorPos(GLFWwindowPtr, w * .5f, h * .5f);
 
 		//Update Objects
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -284,17 +349,14 @@ bool Engine::GameLoop()
 
 			glBindTexture(GL_TEXTURE_2D, objects[i].texID);
 
-			
+			//Update Camera
+			cam.Update(cameraForce);
 
-			//Draw objects[i]ect
-			//if (objects[i].texID == 3)
-			//{
-			//	arrowquad.Render();
-			//}
-			//else
-			//{
-				quad.Render();
-			//}
+			//Draw objects
+			/*Component* modelPtr = objects[i].GetComponent("Model");
+			Model model = *static_cast<Model*>(modelPtr);
+			model.Render();*/
+			objects[i].model.Render();
 
 			//Reset forces for the next frame
 			objects[i].rigidbody.force = vec3(0, 0, 0);

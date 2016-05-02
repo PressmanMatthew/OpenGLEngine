@@ -1,0 +1,40 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGL.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Engine.cpp
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(16): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(45): warning C4305: 'initializing': truncation from 'double' to 'const float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(47): warning C4305: 'initializing': truncation from 'double' to 'const float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(80): warning C4018: '<': signed/unsigned mismatch
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(95): warning C4305: 'initializing': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(96): warning C4018: '<': signed/unsigned mismatch
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(102): warning C4305: '+=': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(105): warning C4305: '+=': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(116): warning C4018: '<': signed/unsigned mismatch
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(120): warning C4305: '=': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(254): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(291): warning C4305: 'initializing': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(296): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(297): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(320): warning C4305: '=': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(325): warning C4305: '=': truncation from 'double' to 'float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(329): warning C4018: '<': signed/unsigned mismatch
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.cpp(365): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Compiling...
+  Main.cpp
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(16): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(45): warning C4305: 'initializing': truncation from 'double' to 'const float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(47): warning C4305: 'initializing': truncation from 'double' to 'const float'
+  InputManager.cpp
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(16): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(45): warning C4305: 'initializing': truncation from 'double' to 'const float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(47): warning C4305: 'initializing': truncation from 'double' to 'const float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\inputmanager.cpp(19): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\inputmanager.cpp(24): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+  Game.cpp
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(16): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(45): warning C4305: 'initializing': truncation from 'double' to 'const float'
+\\banner.main.ad.rit.edu\students\mrp3362\igmprofile\documents\github\openglengine\opengl\engine.h(47): warning C4305: 'initializing': truncation from 'double' to 'const float'
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  Camera.cpp
+  OpenGL.vcxproj -> \\banner.main.ad.rit.edu\students\mrp3362\IGMProfile\Documents\GitHub\OpenGLEngine\Debug\MatthewPressmanEngine.exe

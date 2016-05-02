@@ -13,8 +13,11 @@ Texture::~Texture()
 
 bool Texture::Load(const char* texFile)
 {
+	string locTexFile = texFile;
+	string sFilePath = "textures/" + locTexFile;
+	char* filePath = &sFilePath[0];
 	//Load in the image
-	FIBITMAP* image = FreeImage_Load(FreeImage_GetFileType(texFile, 0), texFile);
+	FIBITMAP* image = FreeImage_Load(FreeImage_GetFileType(filePath, 0), filePath);
 
 	if (image == nullptr) return false;
 
@@ -28,8 +31,11 @@ bool Texture::Load(const char* texFile)
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
+	name = texFile;
+	this->texID = texID;
+
 	//Add the texture ID to the list
-	textures.push_back(texID);
+	TextureManager::textures[texFile] = texID;
 
 	//Upload the texture to the graphics card
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA, FreeImage_GetWidth(image32), FreeImage_GetHeight(image32), 0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(image32));
